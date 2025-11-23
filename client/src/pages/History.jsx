@@ -1,107 +1,152 @@
-import { useEffect, useState } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { useEffect, useState, useRef } from "react";
+import {
+  motion,
+  useTransform,
+  useScroll,
+  useSpring,
+  AnimatePresence,
+} from "framer-motion";
 
 const History = () => {
-  const [events, setEvents] = useState([]);
+  const [allEvents, setAllEvents] = useState([]); // Garde TOUS les événements en mémoire
+  const [filteredEvents, setFilteredEvents] = useState([]); // Ceux qu'on affiche
+  const [activeFilter, setActiveFilter] = useState("Tous"); // Filtre actif
 
-  // Récupération des données
+  const targetRef = useRef(null);
+
+  // Scroll Logic
+  const { scrollYProgress } = useScroll({ target: targetRef });
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-90%"]);
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
   useEffect(() => {
-    fetch('http://localhost:3001/api/history')
-      .then(res => res.json())
-      .then(data => setEvents(data))
-      .catch(err => console.error(err));
+    fetch("http://localhost:3001/api/history")
+      .then((res) => res.json())
+      .then((data) => {
+        setAllEvents(data);
+        setFilteredEvents(data); // Au début, on affiche tout
+      })
+      .catch((err) => console.error(err));
   }, []);
 
-  // Hook pour la barre de progression verticale (La ligne rouge qui se remplit)
-  const { scrollYProgress } = useScroll();
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
+  // Fonction de filtrage
+  const filterBy = (categorie) => {
+    setActiveFilter(categorie);
+    if (categorie === "Tous") {
+      setFilteredEvents(allEvents);
+    } else {
+      setFilteredEvents(allEvents.filter((e) => e.categorie === categorie));
+    }
+  };
+
+  const filters = ["Tous", "Championnat", "Légende", "Course", "Tech"];
 
   return (
-    <div className="min-h-screen bg-f1-dark text-white overflow-hidden">
-      
-      {/* HEADER AVEC APPARITION DOUCE */}
-      <motion.div 
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="pt-32 pb-16 text-center relative z-10"
-      >
-        <h2 className="text-5xl md:text-7xl font-bold uppercase tracking-tighter mb-4">
-          L'Héritage <span className="text-transparent bg-clip-text bg-gradient-to-r from-f1-red to-orange-500">Immortel</span>
-        </h2>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto px-4">
-          Chaque virage a une histoire. Chaque époque a ses héros.
-        </p>
-      </motion.div>
+    <div ref={targetRef} className="relative h-[400vh] bg-f1-dark">
+      {/* CADRE FIXE */}
+      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+        {/* FOND GRAPHIQUE */}
+        <div
+          className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+          }}
+        ></div>
 
-      <div className="max-w-5xl mx-auto relative px-4 pb-32">
-        
-        {/* LA LIGNE VERTICALE (L'ARRIÈRE PLAN GRIS) */}
-        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-white/10 md:-ml-0.5 rounded-full"></div>
+        {/* HEADER ET FILTRES FIXES */}
+        <div className="absolute top-24 left-10 z-30">
+          <div className="bg-f1-dark/90 backdrop-blur px-6 py-4 border-l-4 border-f1-red rounded-r-xl shadow-2xl mb-6">
+            <h2 className="text-3xl font-black uppercase italic text-white tracking-tighter">
+              Chronologie <span className="text-f1-red">F1</span>
+            </h2>
+            <p className="text-xs text-gray-400 font-mono mt-1 mb-4">
+              DATA ARCHIVE • {filteredEvents.length} ÉVÉNEMENTS
+            </p>
 
-        {/* LA LIGNE ROUGE QUI DESCEND AVEC LE SCROLL (L'INDICATEUR) */}
-        <motion.div 
-            style={{ scaleY }}
-            className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-f1-red via-red-500 to-f1-dark md:-ml-0.5 origin-top rounded-full z-0 shadow-[0_0_15px_rgba(225,6,0,0.8)]"
+            {/* BOUTONS DE FILTRE */}
+            <div className="flex flex-wrap gap-2">
+              {filters.map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => filterBy(filter)}
+                  className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider transition-all border ${
+                    activeFilter === filter
+                      ? "bg-f1-red border-f1-red text-white shadow-[0_0_10px_rgba(225,6,0,0.5)]"
+                      : "bg-transparent border-white/20 text-gray-400 hover:border-white hover:text-white"
+                  }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* PROGRESSION */}
+        {/* On descend la ligne grise à 55% de la hauteur */}
+        <div className="absolute top-[55%] left-0 w-full h-[2px] bg-white/10 z-0"></div>
+        {/* On descend la ligne rouge à 55% aussi */}
+        <motion.div
+          style={{ scaleX }}
+          className="absolute top-[55%] left-0 w-full h-[4px] bg-f1-red origin-left z-10 shadow-[0_0_15px_rgba(225,6,0,0.8)]"
         />
+        {/* RAIL DES CARTES */}
+        {/* RAIL DES CARTES */}
+        {/* Ajout de 'pt-32' pour pousser globalement tout le contenu vers le bas */}
+        <motion.div style={{ x }} className="flex gap-12 pl-[30vw] items-center pt-32 relative z-20">
+          
+          <AnimatePresence mode='popLayout'>
+            {filteredEvents.map((event, index) => (
+                <motion.div 
+                    key={event.id} 
+                    /* ... (le reste des props animation ne change pas) ... */
+                    layout
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="relative group min-w-[250px]"
+                >
+                    {/* POINT ET TIGE */}
+                    {/* Note : On garde top-1/2 ici car c'est relatif à ce conteneur qui est déjà descendu */}
+                    <div className="absolute top-1/2 left-1/2 -ml-3 -mt-3 w-6 h-6 bg-f1-dark border-2 border-white/50 rounded-full z-30 group-hover:border-f1-red group-hover:scale-125 transition-all duration-300">
+                        <div className="w-2 h-2 bg-white rounded-full absolute top-1.5 left-1.5 group-hover:bg-f1-red"></div>
+                    </div>
+                    {/* TIGE : On garde la logique */}
+                    <div className={`absolute left-1/2 w-[1px] h-16 bg-white/20 -ml-[0.5px] transition-all duration-500 group-hover:h-24 group-hover:bg-f1-red/50 ${index % 2 === 0 ? 'bottom-1/2 origin-bottom' : 'top-1/2 origin-top'}`}></div>
 
-        {/* LISTE DES ÉVÉNEMENTS */}
-        {events.map((event, index) => (
-          <EventCard key={event.id} event={event} index={index} />
-        ))}
+                    {/* CARTE : C'EST ICI LE GROS CHANGEMENT DE MARGE */}
+                    <div className={`
+                            w-64 p-4 rounded bg-gray-900/90 border border-white/10 backdrop-blur-md 
+                            hover:border-f1-red transition-all duration-300 hover:bg-gray-800
+                            flex flex-col gap-2 relative
+                            ${index % 2 === 0 
+                                ? '-mt-[280px]'  /* AVANT: -mt-[380px] -> ON A GAGNÉ 100px D'ESPACE EN HAUT */
+                                : 'mt-[150px]'   /* AVANT: mt-[180px] -> ON RESSERRE UN PEU LE BAS AUSSI */
+                            }
+                        `}
+                    >
+                        <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-1">
+                            <span className="text-3xl font-black text-f1-red italic">{event.annee}</span>
+                            <span className="text-[9px] uppercase font-mono text-gray-500 border border-gray-700 px-1 rounded">
+                                {event.categorie || 'General'}
+                            </span>
+                        </div>
+                        <h3 className="text-sm font-bold text-white uppercase leading-tight min-h-[40px] flex items-center">{event.titre}</h3>
+                        <p className="text-xs text-gray-400 leading-relaxed text-justify">{event.description}</p>
+                    </div>
+                </motion.div>
+            ))}
+          </AnimatePresence>
 
+          <div className="w-[50vw]"></div>
+
+        </motion.div>
       </div>
     </div>
   );
 };
-
-// COMPOSANT CARTE (Pour alléger le code principal)
-const EventCard = ({ event, index }) => {
-    const isLeft = index % 2 === 0; // Une fois à gauche, une fois à droite (sur PC)
-
-    return (
-        <motion.div 
-            // C'est ici que l'animation au scroll se joue (viewport)
-            initial={{ opacity: 0, x: isLeft ? -100 : 100, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }} // L'anim se lance un peu avant que l'élément soit totalement visible
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className={`mb-24 flex flex-col md:flex-row items-center justify-between w-full relative z-10 ${isLeft ? 'md:flex-row-reverse' : ''}`}
-        >
-            
-            {/* ESPACE VIDE */}
-            <div className="hidden md:block w-5/12"></div>
-
-            {/* LE POINT CENTRAL (Pulsation) */}
-            <div className="absolute left-4 md:left-1/2 -ml-[5px] md:-ml-4 mt-1.5 md:mt-0">
-                <motion.div 
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    className="w-3 h-3 md:w-8 md:h-8 bg-f1-dark border-2 md:border-4 border-f1-red rounded-full shadow-[0_0_20px_rgba(225,6,0,1)] relative z-20 flex items-center justify-center"
-                >
-                     <div className="w-1 h-1 md:w-2 md:h-2 bg-white rounded-full"></div>
-                </motion.div>
-            </div>
-
-            {/* LA CARTE DE CONTENU */}
-            <div className="w-full md:w-5/12 pl-12 md:pl-0">
-                <div className="bg-white/5 p-8 rounded-2xl border border-white/10 hover:border-f1-red/50 transition-colors backdrop-blur-md group hover:bg-white/10">
-                    <span className="text-6xl font-black text-white/20 absolute -top-8 right-4 select-none z-0 group-hover:text-f1-red/20 transition-colors">
-                        {event.annee}
-                    </span>
-                    <h3 className="text-2xl font-bold mb-3 text-white relative z-10">{event.titre}</h3>
-                    <p className="text-gray-300 leading-relaxed relative z-10 font-light">
-                        {event.description}
-                    </p>
-                </div>
-            </div>
-
-        </motion.div>
-    );
-}
 
 export default History;
