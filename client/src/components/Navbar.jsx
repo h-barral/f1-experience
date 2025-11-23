@@ -1,21 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const navigate = useNavigate();
-
-  // ===========================================================================
-  // SECTION 1 : RÉCUPÉRATION DE L'UTILISATEUR
-  // ===========================================================================
-  // On regarde si on a un "user" stocké dans la mémoire du navigateur
+  // On récupère l'user stocké
   const user = JSON.parse(localStorage.getItem('user'));
 
-  // ===========================================================================
-  // SECTION 2 : FONCTION DÉCONNEXION
-  // ===========================================================================
   const handleLogout = () => {
-    // 1. On supprime la mémoire
     localStorage.removeItem('user');
-    // 2. On recharge la page pour remettre la Navbar à zéro
     window.location.reload(); 
   };
 
@@ -37,22 +27,20 @@ const Navbar = () => {
               <NavLink to="/">Accueil</NavLink>
               <NavLink to="/history">Histoire</NavLink>
               <NavLink to="/drivers">Pilotes</NavLink>
-              {/* Le Paddock est accessible à tout le monde pour voir, mais interactif seulement si connecté */}
               <NavLink to="/paddock">Le Paddock</NavLink>
             </div>
           </div>
 
-          {/* ===========================================================================
-              SECTION 3 : ZONE UTILISATEUR (DYNAMIQUE)
-              =========================================================================== */}
+          {/* ZONE UTILISATEUR */}
           <div>
             {user ? (
-              // CAS 1 : L'UTILISATEUR EST CONNECTÉ
               <div className="flex items-center gap-4">
-                <div className="text-right hidden md:block">
+                {/* Lien vers le profil */}
+                <Link to="/profile" className="text-right hidden md:block hover:opacity-80 transition">
                     <p className="text-xs text-gray-400 uppercase">Pilote</p>
                     <p className="text-sm font-bold text-white">{user.pseudo}</p>
-                </div>
+                </Link>
+                
                 <button 
                     onClick={handleLogout}
                     className="bg-white/10 hover:bg-f1-red text-white px-4 py-2 rounded text-sm font-bold uppercase tracking-wider transition-all border border-white/20"
@@ -61,7 +49,6 @@ const Navbar = () => {
                 </button>
               </div>
             ) : (
-              // CAS 2 : VISITEUR (NON CONNECTÉ)
               <Link to="/auth" className="bg-f1-red hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-bold uppercase tracking-wider transition-all transform hover:scale-105">
                 Connexion
               </Link>
@@ -74,7 +61,7 @@ const Navbar = () => {
   );
 };
 
-// Petit composant helper pour les liens (inchangé)
+// Composant interne pour les liens
 const NavLink = ({ to, children }) => (
   <Link 
     to={to} 

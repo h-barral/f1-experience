@@ -128,6 +128,26 @@ app.post("/api/auth/login", (req, res) => {
 });
 
 // ===========================================================================
+// ROUTE : MISE À JOUR PROFIL
+// ===========================================================================
+app.put("/api/user/update", (req, res) => {
+  const { id, ecurie_favorite, pilote_favori, circuit_favori, est_public } =
+    req.body;
+
+  const sql =
+    "UPDATE utilisateurs SET ecurie_favorite = ?, pilote_favori = ?, circuit_favori = ?, est_public = ? WHERE id = ?";
+
+  db.query(
+    sql,
+    [ecurie_favorite, pilote_favori, circuit_favori, est_public, id],
+    (err, result) => {
+      if (err) return res.status(500).json(err);
+      res.json({ message: "Profil mis à jour avec succès !" });
+    }
+  );
+});
+
+// ===========================================================================
 // ROUTE : QUIZ (Récupérer 5 questions au hasard)
 // ===========================================================================
 app.get("/api/quiz", (req, res) => {

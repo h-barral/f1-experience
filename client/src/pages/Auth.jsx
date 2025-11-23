@@ -53,15 +53,16 @@ const Auth = () => {
         );
 
         if (isLogin) {
-          // 1. On sauvegarde l'utilisateur dans la mémoire du navigateur
+          // 1. On sauvegarde l'utilisateur
           localStorage.setItem("user", JSON.stringify(data.user));
 
-          // 2. On attend 1 seconde puis on redirige vers l'accueil
+          // 2. On attend 1 seconde puis on recharge la page vers l'accueil
           setTimeout(() => {
-            navigate("/");
+            // navigate("/");  <-- ON ENLÈVE ÇA (ça ne recharge pas la navbar)
+            window.location.href = "/"; // <-- ON MET ÇA (ça force le rechargement)
           }, 1000);
+          
         } else {
-          // Si c'était une inscription, on bascule juste sur le formulaire de connexion
           setIsLogin(true);
         }
       } else {
