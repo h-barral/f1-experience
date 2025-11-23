@@ -27,6 +27,8 @@ const Navbar = () => {
               <NavLink to="/">Accueil</NavLink>
               <NavLink to="/history">Histoire</NavLink>
               <NavLink to="/drivers">Pilotes</NavLink>
+              <NavLink to="/circuits">Circuits</NavLink>
+              <NavLink to="/leaderboard">Classement</NavLink>
               <NavLink to="/paddock">Le Paddock</NavLink>
             </div>
           </div>

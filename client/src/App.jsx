@@ -9,6 +9,8 @@ import History from './pages/History';
 import Auth from './pages/Auth';
 import Quiz from './pages/Quiz';
 import Profile from './pages/Profile'; // <--- C'est souvent lui qui manque !
+import Leaderboard from './pages/Leaderboard';
+import Circuits from './pages/Circuits';  
 
 function App() {
   return (
@@ -23,12 +25,14 @@ function App() {
           <Route path="/history" element={<History />} />
           <Route path="/paddock" element={<Quiz />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/circuits" element={<Circuits />} />
         </Routes>
       </div>
     </Router>
   );
 
-  
+
 }
 
 export default App;

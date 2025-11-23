@@ -159,6 +159,46 @@ app.get("/api/quiz", (req, res) => {
   });
 });
 
+// ===========================================================================
+// ROUTE : MISE À JOUR DU SCORE (Ajouter des points)
+// ===========================================================================
+app.put("/api/user/score", (req, res) => {
+  const { id, points } = req.body;
+  // On additionne les points gagnés au total existant
+  const sql = "UPDATE utilisateurs SET points = points + ? WHERE id = ?";
+
+  db.query(sql, [points, id], (err, result) => {
+    if (err) return res.status(500).json(err);
+    res.json({ message: "Points ajoutés au championnat !" });
+  });
+});
+
+// ===========================================================================
+// ROUTE : LEADERBOARD (Top 10)
+// ===========================================================================
+app.get("/api/leaderboard", (req, res) => {
+  // On récupère le pseudo, les points, l'écurie et le pilote favori
+  // On trie par points décroissant (DESC)
+  const sql =
+    "SELECT pseudo, points, ecurie_favorite, pilote_favori FROM utilisateurs ORDER BY points DESC LIMIT 10";
+
+  db.query(sql, (err, data) => {
+    if (err) return res.status(500).json(err);
+    res.json(data);
+  });
+});
+
+// ===========================================================================
+// ROUTE : CIRCUITS
+// ===========================================================================
+app.get("/api/circuits", (req, res) => {
+  const sql = "SELECT * FROM circuits";
+  db.query(sql, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.json(data);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`🏎️  Serveur démarré sur http://localhost:${PORT}`);
 });

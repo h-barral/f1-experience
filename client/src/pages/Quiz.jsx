@@ -21,19 +21,32 @@ const Quiz = () => {
   }, []);
 
   // Fonction quand on clique sur une réponse
+  // N'oublie pas de récupérer l'user au début du composant !
+  // Ajoute ça juste après les autres useState :
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const handleAnswer = (choixIndex) => {
     const currentQuestion = questions[currentIndex];
     
-    // Vérification (Attention : choixIndex commence à 1, comme dans la BDD)
+    let newScore = score;
     if (choixIndex === currentQuestion.bonne_reponse) {
-      setScore(score + 1);
+      newScore = score + 1;
+      setScore(newScore);
     }
 
-    // Passage à la suite
+    // Passage à la suite ou fin
     if (currentIndex + 1 < questions.length) {
       setCurrentIndex(currentIndex + 1);
     } else {
       setShowResult(true);
+      // SAUVEGARDE DU SCORE SI CONNECTÉ
+      if (user && newScore > 0) {
+        fetch('http://localhost:3001/api/user/score', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: user.id, points: newScore })
+        }).catch(err => console.error("Erreur sauvegarde score", err));
+      }
     }
   };
 
