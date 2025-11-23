@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-  // On récupère l'user stocké
   const user = JSON.parse(localStorage.getItem('user'));
 
   const handleLogout = () => {
@@ -27,9 +26,9 @@ const Navbar = () => {
               <NavLink to="/">Accueil</NavLink>
               <NavLink to="/history">Histoire</NavLink>
               <NavLink to="/drivers">Pilotes</NavLink>
+              <NavLink to="/teams">Écuries</NavLink> {/* NOUVEAU LIEN */}
               <NavLink to="/circuits">Circuits</NavLink>
-              <NavLink to="/leaderboard">Classement</NavLink>
-              <NavLink to="/paddock">Le Paddock</NavLink>
+              <NavLink to="/paddock">Le Paddock</NavLink> {/* Contient maintenant le classement */}
             </div>
           </div>
 
@@ -37,12 +36,10 @@ const Navbar = () => {
           <div>
             {user ? (
               <div className="flex items-center gap-4">
-                {/* Lien vers le profil */}
                 <Link to="/profile" className="text-right hidden md:block hover:opacity-80 transition">
                     <p className="text-xs text-gray-400 uppercase">Pilote</p>
                     <p className="text-sm font-bold text-white">{user.pseudo}</p>
                 </Link>
-                
                 <button 
                     onClick={handleLogout}
                     className="bg-white/10 hover:bg-f1-red text-white px-4 py-2 rounded text-sm font-bold uppercase tracking-wider transition-all border border-white/20"
@@ -63,7 +60,6 @@ const Navbar = () => {
   );
 };
 
-// Composant interne pour les liens
 const NavLink = ({ to, children }) => (
   <Link 
     to={to} 

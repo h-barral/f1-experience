@@ -1,22 +1,15 @@
-// ===========================================================================
-// SECTION 1 : IMPORTS & DÉPENDANCES
-// ===========================================================================
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+// 1. Import du widget
+import NextRace from '../components/NextRace';
 
 const Home = () => {
   return (
-    // CONTENEUR PRINCIPAL (Pleine page, pas de scroll inutile)
-    <div className="relative h-screen w-full bg-f1-dark overflow-hidden flex items-center justify-center">
+    <div className="relative min-h-screen w-full bg-f1-dark overflow-hidden flex flex-col items-center justify-center pt-20">
 
-      {/* ===========================================================================
-          SECTION 2 : BACKGROUND ANIMÉ (Effet Vitesse)
-          =========================================================================== */}
+      {/* BACKGROUND ANIMÉ (Inchangé) */}
       <div className="absolute inset-0 z-0">
-        {/* Grille néon qui bouge */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-        
-        {/* Cercles de lumière rouge (Glow) */}
         <motion.div 
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 4, repeat: Infinity }}
@@ -29,12 +22,9 @@ const Home = () => {
         />
       </div>
 
-      {/* ===========================================================================
-          SECTION 3 : CONTENU HERO (Le texte central)
-          =========================================================================== */}
-      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto">
+      {/* CONTENU HERO */}
+      <div className="relative z-10 text-center px-4 max-w-6xl mx-auto w-full">
         
-        {/* SUR-TITRE (Apparition rapide) */}
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -44,7 +34,6 @@ const Home = () => {
           Saison 2025 • Le Hub Officiel
         </motion.p>
 
-        {/* TITRE PRINCIPAL (Gros impact) */}
         <motion.h1 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -57,7 +46,6 @@ const Home = () => {
           </span>
         </motion.h1>
 
-        {/* DESCRIPTION */}
         <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -69,16 +57,12 @@ const Home = () => {
           archives historiques et profils détaillés.
         </motion.p>
 
-        {/* ===========================================================================
-            SECTION 4 : BOUTONS D'ACTION (CTA)
-            =========================================================================== */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex flex-col md:flex-row gap-6 justify-center items-center"
+          className="flex flex-col md:flex-row gap-6 justify-center items-center mb-16"
         >
-          {/* Bouton Principal */}
           <Link to="/drivers" className="group relative px-8 py-4 bg-f1-red text-white font-bold uppercase tracking-wider overflow-hidden rounded">
             <span className="relative z-10 group-hover:tracking-widest transition-all duration-300">
               Voir les Pilotes
@@ -86,11 +70,13 @@ const Home = () => {
             <div className="absolute inset-0 bg-white transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out mix-blend-overlay"></div>
           </Link>
 
-          {/* Bouton Secondaire */}
           <Link to="/history" className="px-8 py-4 border border-white/20 text-white font-bold uppercase tracking-wider hover:bg-white/10 transition rounded backdrop-blur-sm">
             L'Histoire
           </Link>
         </motion.div>
+
+        {/* 2. LE WIDGET NEXT RACE */}
+        <NextRace />
 
       </div>
     </div>
