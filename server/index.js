@@ -127,6 +127,18 @@ app.post("/api/auth/login", (req, res) => {
   });
 });
 
+// ===========================================================================
+// ROUTE : QUIZ (Récupérer 5 questions au hasard)
+// ===========================================================================
+app.get("/api/quiz", (req, res) => {
+  // ORDER BY RAND() permet de mélanger les questions côté serveur
+  const sql = "SELECT * FROM questions ORDER BY RAND() LIMIT 5";
+  db.query(sql, (err, data) => {
+    if (err) return res.status(500).json(err);
+    return res.json(data);
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`🏎️  Serveur démarré sur http://localhost:${PORT}`);
 });
