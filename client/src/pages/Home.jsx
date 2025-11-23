@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 // 1. Import du widget
 import NextRace from '../components/NextRace';
+import LiveStandings from '../components/LiveStandings';
 
 const Home = () => {
   return (
@@ -77,6 +78,12 @@ const Home = () => {
 
         {/* 2. LE WIDGET NEXT RACE */}
         <NextRace />
+
+        {/* 3. LE CLASSEMENT LIVE (Nouveau !) */}
+        <LiveStandings />
+
+        {/* Espace pour respirer avant le footer */}
+        <div className="pb-24"></div>
 
       </div>
     </div>
