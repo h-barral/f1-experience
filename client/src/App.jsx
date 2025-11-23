@@ -5,6 +5,7 @@ import Drivers from './pages/Drivers';
 import DriverDetail from './pages/DriverDetail';
 import History from './pages/History';
 import Home from './pages/Home'; // <--- On importe notre nouvelle Home
+import Auth from './pages/Auth';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/drivers" element={<Drivers />} />
           <Route path="/drivers/:id" element={<DriverDetail />} />
           <Route path="/history" element={<History />} />
+          <Route path="/auth" element={<Auth />} />
         </Routes>
       </div>
     </Router>
