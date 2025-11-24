@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Effet de lueur rouge au survol */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(225, 6, 0, 0.4);
+  border-color: #e10600;
+  transform: translateY(-5px);
+}
+
+/* Réafficher le curseur normal sur mobile (car pas de souris) */
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  .cursor-none {
+    cursor: auto !important;
+  }
+}

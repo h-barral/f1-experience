@@ -82,11 +82,14 @@ const Drivers = () => {
                                 <div className="relative bg-gray-900 rounded-xl overflow-hidden border border-gray-800 hover:border-f1-red transition-all duration-300 hover:-translate-y-2">
                                     <div className="h-48 overflow-hidden relative">
                                         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent z-10"></div>
+                                        
+                                        
                                         <img 
                                             src={`/images/${driver.photo_url}`} 
                                             alt={driver.nom} 
                                             className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                                         />
+
                                     </div>
                                     <div className="p-6 relative z-10 -mt-12">
                                         <div className="flex justify-between items-start mb-4">

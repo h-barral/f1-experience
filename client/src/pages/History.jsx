@@ -27,7 +27,9 @@ const History = () => {
         setFilteredEvents(data); // Au début, on affiche tout
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [])
+  
+  ;
 
   // Fonction de filtrage
   const filterBy = (categorie) => {

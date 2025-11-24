@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 // 1. Import du widget
 import NextRace from '../components/NextRace';
 import LiveStandings from '../components/LiveStandings';
+import F1Showroom from '../components/F1Showroom';
 
 const Home = () => {
   return (
@@ -79,6 +80,8 @@ const Home = () => {
         {/* 2. LE WIDGET NEXT RACE */}
         <NextRace />
 
+        <F1Showroom />
+        
         {/* 3. LE CLASSEMENT LIVE (Nouveau !) */}
         <LiveStandings />
 

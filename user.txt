@@ -2,4 +2,13 @@ ID : SuperMax
 Mail : max@redbull.com
 Mdp : 123456
 
-idée : sur la page daccueil ajouter une image 3d d'un formule1 ou l'on peut tourner autour, se rapprocher ou bien cliquer sur un composant en particulier pour afficher sa description et à quoi il sert
+idée : sur la page daccueil ajouter une image 3d d'un formule1 ou l'on 
+peut tourner autour, se rapprocher ou bien cliquer sur un composant en 
+particulier pour afficher sa description et à quoi il sert
+
+
+
+
+c'est bien j'ai tout ajouté mais je parlais plus d'interaction avec 
+l'utilisateur un peu à la manière dont le fait le site de lando norris, 
+je sais pas si tu vois ou je veux en venir
